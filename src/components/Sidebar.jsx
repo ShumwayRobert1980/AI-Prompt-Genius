@@ -4,7 +4,7 @@ import Logo from "./Logo.jsx"
 import Folder from "./Folder.jsx"
 import FolderModal from "./FolderModal.jsx"
 import { getCurrentTimestamp, newBlankPrompt, newFilteredPrompt, uuid } from "./js/utils.js"
-import { ArrowNewWindow, Cog, HomeIcon, PlusDoc, PlusFolder } from "./icons/Icons.jsx"
+import { ArrowNewWindow, Cog, HomeIcon, PlusDoc, PlusFolder, ShieldIcon } from "./icons/Icons.jsx"
 import React, { useState } from "react"
 import SettingsModal from "./SettingsModal.jsx"
 import Toast from "./Toast.jsx"
@@ -23,6 +23,8 @@ export default function Sidebar({
     searchTerm,
     setSearchTerm,
     showToast,
+    currentView,
+    setCurrentView,
 }) {
     const t = i18n.t
 
@@ -96,13 +98,19 @@ export default function Sidebar({
                             {/* Sidebar content here */}
                             <li
                                 key=""
-                                className="selected folder"
+                                className={currentView === "prompts" ? "selected folder" : "folder"}
                                 data-folder-name="all"
                                 id="folder-"
                             >
-                                <a onClick={() => selectFolder("")}>
+                                <a onClick={() => { setCurrentView("prompts"); selectFolder("") }}>
                                     <HomeIcon></HomeIcon>
                                     {t(k.ALL_PROMPTS)}
+                                </a>
+                            </li>
+                            <li className={currentView === "detector" ? "selected" : ""}>
+                                <a onClick={() => setCurrentView("detector")}>
+                                    <ShieldIcon />
+                                    Manipulation Detector
                                 </a>
                             </li>
                             {folders.map(folder => (

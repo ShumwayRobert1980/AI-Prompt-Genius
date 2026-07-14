@@ -1,6 +1,7 @@
 import "./App.css"
 import Sidebar from "./components/Sidebar.jsx"
 import MainContent from "./components/MainContent.jsx"
+import ManipulationAnalyzer from "./components/ManipulationAnalyzer.jsx"
 import TransferModal from "./components/TransferModal.jsx"
 import React, { useEffect, useState } from "react"
 import { useLocalStorage } from "@uidotdev/usehooks"
@@ -30,6 +31,7 @@ function App() {
     const [searchTerm, setSearchTerm] = useState("")
     const [toast, setToast] = useState(false)
     const [toastMessage, setToastMessage] = useState("")
+    const [currentView, setCurrentView] = useState("prompts")
 
     const cloudSyncing = getObject("cloudSyncing", false)
     if (cloudSyncing) {
@@ -160,23 +162,31 @@ function App() {
                 searchTerm={searchTerm}
                 setSearchTerm={setSearchTerm}
                 showToast={showToast}
+                currentView={currentView}
+                setCurrentView={setCurrentView}
             />
 
-            <MainContent
-                filteredPrompts={filteredPrompts}
-                setFilteredPrompts={setFilteredPrompts}
-                filterPrompts={filterPrompts}
-                setPrompts={setPrompts}
-                prompts={prompts}
-                tags={tags}
-                folders={folders}
-                filterTags={filterTags}
-                setFilterTags={setFilterTags}
-                setSelectedFolder={setSelectedfolder}
-                selectedFolder={selectedFolder}
-                searchTerm={searchTerm}
-                setSearchTerm={setSearchTerm}
-            />
+            {currentView === "detector" ? (
+                <div className="flex-1 overflow-hidden">
+                    <ManipulationAnalyzer />
+                </div>
+            ) : (
+                <MainContent
+                    filteredPrompts={filteredPrompts}
+                    setFilteredPrompts={setFilteredPrompts}
+                    filterPrompts={filterPrompts}
+                    setPrompts={setPrompts}
+                    prompts={prompts}
+                    tags={tags}
+                    folders={folders}
+                    filterTags={filterTags}
+                    setFilterTags={setFilterTags}
+                    setSelectedFolder={setSelectedfolder}
+                    selectedFolder={selectedFolder}
+                    searchTerm={searchTerm}
+                    setSearchTerm={setSearchTerm}
+                />
+            )}
 
             {toast && <Toast message={toastMessage} />}
             {transferring && <TransferModal />}
